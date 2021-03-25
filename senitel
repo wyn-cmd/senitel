@@ -1,0 +1,106 @@
+#!/usr/bin/python3
+
+#import modules
+import os,sys,hashlib,getpass,pyAesCrypt
+from tkinter import *
+import tkinter as tki
+
+#data buffer
+buff=1024*1024*128
+
+#window
+root=tki.Tk()                                                      
+Height=300                   
+Width=400
+
+
+def delete(file): #securely erase files
+    os.system(f'rm -rf {file}')
+    txt='.'
+    #creates file to remove traces of the deleted file
+    open('.f','w').write(txt)
+    num=0
+    while True:
+        txt+='.....................'
+        #writes data to file to remove traces of deleted file
+        open('.f','w').write(txt) 
+        os.system('rm -rf .f')
+        if num>99:
+            break
+        num+=0.5
+            
+def hashing_algorithm(key,seed):
+    key=f'*%|E{seed}(0{key}^2f#bw$'
+    key=hashlib.md5(key.encode('utf8')).hexdigest()
+    key=hashlib.sha224(key.encode('utf8')).hexdigest()
+    return(key)
+
+
+def decrypt(key,seed): #decypt data
+    key=hashing_algorithm(key,seed)
+    pyAesCrypt.decryptFile('.senitel.encrypt','vault.zip',key,1024*1024*128) #decrypt with AES-256 to get zip file
+    os.system('rm -rf .senitel.encrypt')
+    os.system('unzip vault')
+    os.system('rm -rf vault.zip')
+    t=Label(text='       ***Senitel Unlocked***       ')
+    t.place(x=105,y=145)
+
+def encrypt(key,seed):
+    key=hashing_algorithm(key,seed)
+    os.system('zip vault -0 -r vault')
+    delete('vault')
+    pyAesCrypt.encryptFile('vault.zip','.senitel.encrypt',key,1024*1024*128) #decrypt with AES-256 to get zip file
+    delete('vault.zip')
+    t=Label(text='        ***Senitel Locked***        ')
+    t.place(x=105,y=145)
+
+def senitel(password,seed):
+    #checks if the vault is already encrypted
+    vault_file=os.path.exists('.senitel.encrypt') 
+    #checks if the vault is decrypted
+    vault_vulnerable=os.path.exists('vault/') 
+    if vault_vulnerable==True:
+        try:
+            encrypt(password,seed)
+        except Exception:
+            t=Label(text='     ***Password is Incorrect***     ')
+            t.place(x=104,y=145)
+    else:
+        try:
+            decrypt(password,seed)
+        except Exception:
+            t=Label(text='     ***Password is Incorrect***     ')
+            t.place(x=104,y=145)
+
+
+
+#GUI
+root.title('Senitel')
+tki.Canvas(root,height=Height,width=Width).grid()
+
+#frame
+frame=tki.Frame(root,bg='black')
+frame.place(relx=0.01,rely=0.01,relwidth=0.98,relheight=0.98)
+
+#password
+entry=tki.Entry(frame,font=30,show='*')
+entry.place(relwidth=0.65,relheight=0.11,y=105,x=66)
+
+
+#seed
+entry2=tki.Entry(frame,font=30,show='*')
+entry2.place(relwidth=0.65,relheight=0.11,y=40,x=66)
+
+
+#button
+tki.Button(root,text='enter',bg='white',fg='black',font=80,command=lambda:senitel(entry.get(),entry2.get())).place(relx=0.42,rely=0.6,relwidth=0.15,relheight=0.12)
+
+#labels
+t=Label(text='password:',bg='black',fg='white').place(x=165,y=18)
+t2=Label(text='seed:',bg='black',fg='white').place(x=179,y=82)
+
+#mainloop
+root.mainloop()
+    
+    
+    
