@@ -5,6 +5,3 @@ A secure vault encrypted in AES-256 made in python.
 To install, open terminal and type:
 * chmod +x install.sh
 * ./install.sh
-
-# Run
-Double click on senitel to activate.
