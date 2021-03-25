@@ -1,10 +1,10 @@
 # Senitel
 A secure vault encrypted in AES-256 made in python.
 
-#Installation
+# Installation
 To install, open terminal and type:
-* python3 install.py
-* ~/Desktop/senitel
+* chmod +x install.py
+* ./install.py
 
-#Run
-Double click on the senitel icon in desktop to activate.
+# Run
+Double click on senitel in desktop to activate.
