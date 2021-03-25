@@ -7,4 +7,4 @@ To install, open terminal and type:
 * ./install.sh
 
 # Run
-Double click on senitel in desktop to activate.
+Double click on senitel to activate.
