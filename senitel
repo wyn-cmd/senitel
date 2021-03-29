@@ -10,7 +10,7 @@ buff=1024*1024*128
 
 #window
 root=tki.Tk()                                                      
-Height=300                   
+Height=310                   
 Width=400
 
 
@@ -28,7 +28,7 @@ def delete(file):
         os.system('rm -rf f')
         if num>99:
             break
-        num+=0.1
+        num+=0.05
 
 #hashes the password and seed
 def hashing_algorithm(key,seed):
@@ -44,7 +44,8 @@ def hashing_algorithm(key,seed):
 #decrypt data
 def decrypt(key,seed): 
     key=hashing_algorithm(key,seed)
-    pyAesCrypt.decryptFile('.senitel.encrypt','vault.zip',key,1024*1024*128) #decrypt with AES-256 to get zip file
+    #decrypt with AES-256 to get zip file
+    pyAesCrypt.decryptFile('.senitel.encrypt','vault.zip',key,1024*1024*128) 
     os.system('rm -rf .senitel.encrypt')
     os.system('unzip vault')
     os.system('rm -rf vault.zip')
@@ -56,7 +57,8 @@ def encrypt(key,seed):
     key=hashing_algorithm(key,seed)
     os.system('zip vault -0 -r vault')
     delete('vault')
-    pyAesCrypt.encryptFile('vault.zip','.senitel.encrypt',key,1024*1024*128) #decrypt with AES-256 to get zip file
+    #encrypt zip file with AES-256
+    pyAesCrypt.encryptFile('vault.zip','.senitel.encrypt',key,1024*1024*128) 
     delete('vault.zip')
     t=Label(text='        ***Senitel Locked***        ')
     t.place(x=99,y=175)
@@ -80,7 +82,7 @@ def senitel(password,seed):
             t.place(x=99,y=175)
 
 #GUI
-root.title('Senitel')
+root.title('SENITEL')
 tki.Canvas(root,height=Height,width=Width).grid()
 
 #frame
