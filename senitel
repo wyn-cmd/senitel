@@ -37,7 +37,7 @@ def hashing_algorithm(key,seed):
     while True:
         key=hashlib.sha256(key.encode('utf8')).hexdigest()
         n+=1
-        if n>10125:
+        if n=>10128:
             return(key)
 
 #decrypt data
