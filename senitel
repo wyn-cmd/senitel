@@ -14,9 +14,12 @@ Height=300
 Width=400
 
 
+import shutil
+
 #securely erase files
-def delete(file): 
-    os.system(f'rm -rf {file}')
+def delete(file):
+    if os.path.exists(file):
+        shutil.rmtree(file) if os.path.isdir(file) else os.remove(file)
     txt='.'
     #creates file to remove traces of the deleted file
     open('.f','w').write(txt)
