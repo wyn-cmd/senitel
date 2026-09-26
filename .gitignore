@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+vault/
+vault.zip
+.senitel.encrypt
+.f
