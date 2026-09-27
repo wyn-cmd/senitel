@@ -58,7 +58,9 @@ def build_window():
 
 
 if __name__ == "__main__":
-    if "--status" in sys.argv:
+    if "--version" in sys.argv:
+        print("senitel version 0.1.0")
+    elif "--status" in sys.argv:
         status = "unlocked" if vault_core.is_unlocked() else "locked" if vault_core.is_locked() else "absent"
         if "--json" in sys.argv:
             print(json.dumps({"status": status}))
