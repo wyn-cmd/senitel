@@ -3,6 +3,7 @@
 # Senitel GUI: a password and seed prompt in front of vault_core.
 
 import sys
+import json
 import tkinter as tki
 from tkinter import Label
 
@@ -58,11 +59,10 @@ def build_window():
 
 if __name__ == "__main__":
     if "--status" in sys.argv:
-        if vault_core.is_unlocked():
-            print("unlocked")
-        elif vault_core.is_locked():
-            print("locked")
+        status = "unlocked" if vault_core.is_unlocked() else "locked" if vault_core.is_locked() else "absent"
+        if "--json" in sys.argv:
+            print(json.dumps({"status": status}))
         else:
-            print("absent")
+            print(status)
     else:
         build_window().mainloop()
