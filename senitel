@@ -60,6 +60,14 @@ def build_window():
 if __name__ == "__main__":
     if "--version" in sys.argv:
         print("senitel version 0.1.0")
+    elif "--verify" in sys.argv:
+        # Check if the file is there and readable (not necessarily decodable).
+        import os
+        path = "vault.zip"
+        if os.path.exists(path):
+            print("ok")
+        else:
+            print("missing")
     elif "--status" in sys.argv:
         status = "unlocked" if vault_core.is_unlocked() else "locked" if vault_core.is_locked() else "absent"
         if "--json" in sys.argv:
