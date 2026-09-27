@@ -19,3 +19,11 @@ The vault logic lives in `vault_core.py`, separate from the GUI, so it can be te
 pip install -r requirements.txt
 python3 -m unittest test_vault_core -v
 ```
+
+
+# CLI Flags
+
+- --status: reports if the vault is locked, unlocked, or absent.
+- --json: returns status in json format.
+- --version: displays the current version.
+- --verify: checks if the archive file exists.
