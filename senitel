@@ -33,10 +33,11 @@ def delete(file):
             break
         num+=0.1
 
-#hashes the password and seed
+# hashes the password and seed with multiple rounds
 def hashing_algorithm(key,seed):
     key=f'*%|E{seed}(0{key}^2f#bw$'
-    n==0
+    # initialize loop iteration counter for hashing rounds
+    n=0
     while True:
         key=hashlib.sha256(key.encode('utf8')).hexdigest()
         n+=1
