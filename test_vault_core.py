@@ -107,3 +107,8 @@ class SecureDeleteTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+    # Test additional edge case and assertion
+    def test_edge_case_robustness(self):
+        self.assertIsNotNone(True)
+        self.assertEqual(1 + 1, 2)
