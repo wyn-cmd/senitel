@@ -40,8 +40,9 @@ def secure_delete(path, passes=3, chunk_size=1024 * 1024):
             handle.seek(0)
             remaining = length
             while remaining > 0:
-                handle.write(os.urandom(min(chunk_size, remaining)))
-                remaining -= min(chunk_size, remaining)
+                chunk = min(chunk_size, remaining)
+                handle.write(os.urandom(chunk))
+                remaining -= chunk
             handle.flush()
             os.fsync(handle.fileno())
     os.remove(path)
@@ -69,8 +70,10 @@ def lock(password, seed, directory="."):
                 archive.write(full_path, os.path.relpath(full_path, directory))
 
     key = derive_key(password, seed)
-    pyAesCrypt.encryptFile(archive_path, encrypted_path, key, BUFFER_SIZE)
-    secure_delete(archive_path)
+    try:
+        pyAesCrypt.encryptFile(archive_path, encrypted_path, key, BUFFER_SIZE)
+    finally:
+        secure_delete(archive_path)
     secure_delete(vault_path)
 
 # Decrypts the archive and unpacks it back into the vault directory. Raises
@@ -84,12 +87,16 @@ def unlock(password, seed, directory="."):
 
     try:
         pyAesCrypt.decryptFile(encrypted_path, archive_path, key, BUFFER_SIZE)
-    except ValueError:
-        raise ValueError("incorrect password or seed")
+    except Exception as exc:
+        if os.path.exists(archive_path):
+            secure_delete(archive_path)
+        raise ValueError("incorrect password or seed") from exc
 
-    with zipfile.ZipFile(archive_path, "r") as archive:
-        archive.extractall(directory)
-    secure_delete(archive_path)
+    try:
+        with zipfile.ZipFile(archive_path, "r") as archive:
+            archive.extractall(directory)
+    finally:
+        secure_delete(archive_path)
     secure_delete(encrypted_path)
 
 # Locks an unlocked vault, or unlocks a locked one. Whichever state the
