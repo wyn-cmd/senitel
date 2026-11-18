@@ -59,6 +59,8 @@ def is_locked(directory="."):
 # plaintext copies. Raises on a real I/O problem; a wrong password cannot
 # occur here since encrypting never checks one.
 def lock(password, seed, directory="."):
+    if not password:
+        raise ValueError("password cannot be empty")
     vault_path = os.path.join(directory, VAULT_DIR)
     archive_path = os.path.join(directory, ARCHIVE_NAME)
     encrypted_path = os.path.join(directory, ENCRYPTED_NAME)
