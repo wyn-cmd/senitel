@@ -83,6 +83,8 @@ def lock(password, seed, directory="."):
 # an integrity check failure, and that is translated into one clear error
 # here so callers do not need to know pyAesCrypt's exception types.
 def unlock(password, seed, directory="."):
+    if not password:
+        raise ValueError("password cannot be empty")
     encrypted_path = os.path.join(directory, ENCRYPTED_NAME)
     archive_path = os.path.join(directory, ARCHIVE_NAME)
     key = derive_key(password, seed)
