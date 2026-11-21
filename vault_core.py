@@ -62,6 +62,8 @@ def lock(password, seed, directory="."):
     if not password:
         raise ValueError("password cannot be empty")
     vault_path = os.path.join(directory, VAULT_DIR)
+    if not os.path.isdir(vault_path):
+        raise FileNotFoundError(f"vault directory not found: {vault_path}")
     archive_path = os.path.join(directory, ARCHIVE_NAME)
     encrypted_path = os.path.join(directory, ENCRYPTED_NAME)
 
